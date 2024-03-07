@@ -1,53 +1,70 @@
-import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { handleFetchPhotos } from './articles-api';
+import iziToast from 'izitoast';
 
 import SearchBar from './components/SearchBar/SearchBar';
+import ImageGallery from './components/ImageGallery/ImageGallery';
+import Loader from './components/Loader/Loader';
+import ErrorMessage from './components/ErrorMessage/ErrorMessage';
 
-import './App.css';
-
-const API_URL = 'https://api.unsplash.com';
-const ACCESS_KEY = 'IMgd-JZNb9BN6sDOuDvJqXDAPY6O_etmim3DLFJMLNM';
-
-axios.defaults.baseURL = API_URL;
-
-const searchParms = {
-  client_id: ACCESS_KEY,
-  query: 'car',
-  page: 1,
-  per_page: 18,
-  orientation: 'landscape',
-};
+import 'izitoast/dist/css/iziToast.min.css';
 
 function App() {
+  const [query, setQuery] = useState('');
   const [images, setImages] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchWord, setSearchWord] = useState('dog');
-  const [page, setPage] = useState(2);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [page, setPage] = useState(1);
+
+  const handleSearch = (query) => {
+    setQuery((prevQuery) => (prevQuery !== query ? query : prevQuery));
+    setPage(1);
+    setImages([]);
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
+    if (!query) {
+      return;
+    }
+    const fetchPhotos = async () => {
       try {
-        setIsLoading(true);
-        const res = await axios.get('/search/photos', {
-          params: {
-            ...searchParms,
-            page,
-            query: searchWord,
-          },
-        });
-        console.log(res);
+        setError(false);
+        setLoading(true);
+        const data = await handleFetchPhotos(query, page);
+        if (data.total === 0) {
+          setImages([]);
+          setErrorMsg(
+            "Sorry, I couldn't find pictures for your entry please try again."
+          );
+          setError(false);
+        } else {
+          setImages((prevImages) => prevImages.concat(data.results));
+          iziToast.success({
+            message: `${data.total} photos were found for your request`,
+            position: 'topRight',
+          });
+        }
       } catch (error) {
-        console.error(error.message);
+        setErrorMsg(
+          !error.response.data.errors
+            ? error.message
+            : error.response.data.errors
+        );
+        setError(false);
       } finally {
-        setIsLoading(false);
+        setLoading(false);
       }
     };
-    fetchData();
-  }, []);
+    fetchPhotos();
+  }, [query, page]);
 
   return (
     <div className="App">
-      <SearchBar />
+      <SearchBar onSearch={handleSearch} />
+      {error && <ErrorMessage>{errorMsg}</ErrorMessage>}
+      {images.length > 0 && <ImageGallery images={images} />}
+      {loading && <Loader />}
     </div>
   );
 }
