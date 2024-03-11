@@ -1,0 +1,55 @@
+.searchBar {
+  top: 0;
+  left: 0;
+  position: sticky;
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('https://oir.mobi/uploads/posts/2021-03/1616990293_11-p-fon-dlya-risovaniya-12.jpg');
+  background-size: cover;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px #ccc;
+  padding: 20px 0;
+  margin-bottom: 30px;
+}
+
+.searchForm {
+  min-width: 200px;
+  width: 35%;
+  position: relative;
+}
+.searchInput {
+  font-family: inherit;
+  width: 100%;
+  padding: 10px 10px 10px 40px;
+  border: 2px solid #d1648d;
+  outline: none;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.searchInput:hover,
+.searchInput:focus {
+  border-color: #ff00ff;
+}
+
+.searchBtn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  position: absolute;
+  top: 4px;
+  left: 1px;
+  padding: 10px;
+  border: none;
+  background-color: inherit;
+  color: #000;
+  transition: color 0.2s ease-in-out;
+}
+
+.searchBtn:hover,
+.searchBtn:focus {
+  color: #ff00ff;
+}

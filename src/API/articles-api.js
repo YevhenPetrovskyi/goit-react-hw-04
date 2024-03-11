@@ -9,7 +9,7 @@ const searchParms = {
   client_id: ACCESS_KEY,
   query: '',
   page: 1,
-  per_page: 18,
+  per_page: 20,
   orientation: 'landscape',
 };
 
