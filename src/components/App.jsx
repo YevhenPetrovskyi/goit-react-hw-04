@@ -7,7 +7,7 @@ import ImageGallery from './ImageGallery/ImageGallery';
 import Loader from './Loader/Loader';
 import ErrorMessage from './ErrorMessage/ErrorMessage';
 import LoadMoreBtn from './LoadMoreBtn/LoadMoreBtn';
-import ImageModal from './ImageModal/ImageModal.JSX';
+import ImageModal from './ImageModal/ImageModal.jsx';
 
 function App() {
   const [query, setQuery] = useState('');
